@@ -100,9 +100,6 @@
                             <a class="nav-link active cHover" aria-current="page" href="{% url 'index' %}">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link active cHover" href="{% url 'contact' %}">Contact Us</a>
-                        </li>
-                        <li class="nav-item">
                             <a class="nav-link active cHover" href="{% url 'about' %}">About Us</a>
                         </li>
                         <li class="nav-item">
@@ -181,10 +178,6 @@
                         </div>
                     </div>
                 </div>
-                <h3 class="mt-4">Contact Us</h3>
-                <p>
-                    If you have any questions or would like to schedule an appointment, please visit our <a href="{% url 'contact' %}">Contact Us</a> page.
-                </p>
             </div>
         </div>
     </div>
@@ -192,44 +185,25 @@
         <footer class="py-5">
           <div class="row">
             <div class="col-6 col-md-2 mb-3">
-              <h5>Clinic</h5>
-              <ul class="nav flex-column">
-                <li class="nav-item mb-2"><a href="{% url 'index'%}" class="nav-link p-0 text-body-secondary">Home</a></li>
-                <li class="nav-item mb-2"><a href="{% url 'about'%}" class="nav-link p-0 text-body-secondary">About Us</a></li>
-                <li class="nav-item mb-2"><a href="{% if user.is_authenticated %}{% url 'contact' %}{% else %}#{% endif %}" class="nav-link p-0 text-body-secondary">Contact Us</a></li>
-                <li class="nav-item mb-2"><a href="{% if user.is_authenticated %}{% url 'booking' %}{% else %}#{% endif %}" class="nav-link p-0 text-body-secondary">Booking</a></li>
-              </ul>
-            </div>
-      
-            <div class="col-6 col-md-2 mb-3">
-              <h5>Clinic Services</h5>
-              <ul class="nav flex-column">
-                <li class="nav-item mb-2"><a href="{% if user.is_authenticated %}{% url 'booking' %}{% else %}#{% endif %}" class="nav-link p-0 text-body-secondary">Doctor care</a></li>
-                <li class="nav-item mb-2"><a href="{% if user.is_authenticated %}{% url 'booking' %}{% else %}#{% endif %}" class="nav-link p-0 text-body-secondary">Nursing care</a></li>
-                <li class="nav-item mb-2"><a href="{% if user.is_authenticated %}{% url 'booking' %}{% else %}#{% endif %}" class="nav-link p-0 text-body-secondary">Medical social services</a></li>
-                <li class="nav-item mb-2"><a href="{% if user.is_authenticated %}{% url 'booking' %}{% else %}#{% endif %}" class="nav-link p-0 text-body-secondary">Homemaker or basic assistance care</a></li>
-              </ul>
-            </div>
-
-            <div class="col-6 col-md-2 mb-3">
-                <h5>Contact Us</h5>
+                <h5>Clinic</h5>
                 <ul class="nav flex-column">
-                  <li class="nav-item mb-2"><a href="{% url 'contact'%}" class="nav-link p-0 text-body-secondary">Contact Form</a></li>
+                  <li class="nav-item mb-2"><a href="{% url 'index'%}" class="nav-link p-0 text-body-secondary">Home</a></li>
+                  <li class="nav-item mb-2"><a href="{% url 'about'%}" class="nav-link p-0 text-body-secondary">About Us</a></li>
+                  <li class="nav-item mb-2"><a href="{% if user.is_authenticated %}{% url 'booking' %}{% else %}#{% endif %}" class="nav-link p-0 text-body-secondary">Booking</a></li>
                 </ul>
               </div>
-      
-              <div class="col-md-5 offset-md-1 mb-3">
-                <form method="post" action="{% url 'subscribe' %}">
-                    {% csrf_token %}
-                    <h5>Subscribe to our newsletter</h5>
-                    <p>Monthly digest of what's new and exciting from us.</p>
-                    <div class="d-flex flex-column flex-sm-row w-100 gap-2">
-                        <label for="newsletter1" class="visually-hidden">Email address</label>
-                        <input id="newsletter1" type="text" name="email" class="form-control" placeholder="Email address">
-                        <button class="btn btn-primary" type="submit">Subscribe</button>
-                    </div>
-                </form>
-            </div>
+        
+              <div class="col-6 col-md-2 mb-3">
+                <h5>Clinic Services</h5>
+                <ul class="nav flex-column">
+                  <li class="nav-item mb-2"><a href="{% if user.is_authenticated %}{% url 'booking' %}{% else %}#{% endif %}" class="nav-link p-0 text-body-secondary">Consultation</a></li>
+                  <li class="nav-item mb-2"><a href="{% if user.is_authenticated %}{% url 'booking' %}{% else %}#{% endif %}" class="nav-link p-0 text-body-secondary">Follow-up</li>
+                  <li class="nav-item mb-2"><a href="{% if user.is_authenticated %}{% url 'booking' %}{% else %}#{% endif %}" class="nav-link p-0 text-body-secondary">Health Check-up</a></li>
+                  <li class="nav-item mb-2"><a href="{% if user.is_authenticated %}{% url 'booking' %}{% else %}#{% endif %}" class="nav-link p-0 text-body-secondary">Vaccination</a></li>
+                  <li class="nav-item mb-2"><a href="{% if user.is_authenticated %}{% url 'booking' %}{% else %}#{% endif %}" class="nav-link p-0 text-body-secondary">Lab Test</a></li>
+                  <li class="nav-item mb-2"><a href="{% if user.is_authenticated %}{% url 'booking' %}{% else %}#{% endif %}" class="nav-link p-0 text-body-secondary">Pediatric Check-up</a></li>
+                </ul>
+              </div>
           </div>
           <div class="d-flex flex-column flex-sm-row justify-content-between py-4 my-4 border-top">
             <p>&copy; HealthyLife Clinic, Inc. All rights reserved.</p>
