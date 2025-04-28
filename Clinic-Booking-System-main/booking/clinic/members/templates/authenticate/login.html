@@ -1,0 +1,62 @@
+<title>Login</title>
+{% extends 'layout.html' %}
+{% load static %}
+{% block body %}
+
+
+{% if user.is_authenticated %}
+<h1 class="p-2 text-center mb-5 text-warning">You Are Already Signed In</h1>
+
+{% else %}
+
+  
+<div class="shadow pb-3 pt-4 mb-5 bg-body bg-body rounded text-black  m-5 fPersian">
+  <h1 class="p-3  me-3">Sign in</h1>
+  <div class="m-5">
+    <form method="POST" action="" class="">
+        {% csrf_token %}
+            <div class="mb-3">
+              <label for="exampleInputEmail1" class="form-label fs-2">Username</label>
+              <input type="text" width="" class="form-control form-control-lg" name="username" aria-describedby="emailHelp" placeholder="Username...">
+            </div>
+            <div class="mb-3">
+              <label for="exampleInputPassword1" class="form-label fs-2">Password</label>
+              <input type="password" class="form-control form-control-lg" placeholder="Password..." name="password">
+            </div>
+            <button type="submit" id="myButton" class="btn btn-primary">
+              <span class="button-text">Sign in</span>
+              <span class="spinner-border spinner-border-sm ms-2" role="status" aria-hidden="true"></span>
+              <span class="loading-text ms-2">Loading...</span>
+            </button>
+            </br>
+            <label class="form-label fs-3 mt-5">Don't Have An Account? Create One Now!</label>
+            </br>
+            <a href="{% url 'register' %}" class="btn btn-primary">Sign Up</a> 
+          </br>
+          <script>
+            document.getElementById('myButton').addEventListener('click', function(event) {
+                var buttonText = this.querySelector('.button-text');
+                var spinner = this.querySelector('.spinner-border');
+                var loadingText = this.querySelector('.loading-text');
+                
+                buttonText.style.display = 'none';
+                spinner.style.display = 'inline-block';
+                loadingText.style.display = 'inline';
+            });
+        
+            window.addEventListener('pageshow', function(event) {
+                var buttonText = document.querySelector('.button-text');
+                var spinner = document.querySelector('.spinner-border');
+                var loadingText = document.querySelector('.loading-text');
+        
+                buttonText.style.display = 'inline';
+                spinner.style.display = 'none';
+                loadingText.style.display = 'none';
+            });
+        </script>
+    </form>
+  </div>
+</div>
+{% endif %}
+
+{% endblock %}

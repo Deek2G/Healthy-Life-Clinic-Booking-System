@@ -1,0 +1,165 @@
+{% load static %}
+
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
+    <!-- Bootstrap 5 JavaScript with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8" crossorigin="anonymous" defer></script>
+
+    {% block head %}
+    {% endblock %}
+</head>
+<body>
+    <header>
+        <nav class="navbar bg-white navbar-light navbar-expand-lg shadow-sm">
+            <div class="container-fluid">
+                <a class="navbar-brand cHover cGreen fs-2" href="{% url 'index' %}">
+                    HealthyLife
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav mb-2 mb-lg-0 fs-5 align-items-center">
+                        <li class="nav-item">
+                            <a class="nav-link active cHover" aria-current="page" href="{% url 'index' %}">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active cHover" href="{% url 'contact' %}">Contact Us</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active cHover" href="{% url 'about' %}">About Us</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active cHover" href="{% url 'booking' %}">Online Booking</a>
+                        </li>
+                        {% if user.is_authenticated and user.is_staff %}
+                        <li class="nav-item">
+                            <a class="nav-link active cHover" href="{% url 'staffPanel' %}">Staff Panel</a>
+                        </li>
+                        {% endif %}
+                        {% if user.is_authenticated %}
+                        <li class="nav-item dropdown me-3 fs-5">
+                            <a class="nav-link active dropdown-toggle cHover" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Profile
+                            </a>
+                            <ul class="dropdown-menu border zNav">
+                                <li><a class="dropdown-item" href="{% url 'userPanel' %}">User Panel</a></li>
+                                <li><hr class=""></li>
+                                <li><a class="dropdown-item" href="{% url 'logout' %}">Sign Out</a></li>
+                            </ul>
+                        </li>
+                        {% else %}
+                        <li class="nav-item me-3">
+                            <a class="nav-link active cHover" href="{% url 'login' %}">Sign in/Sign Up</a>
+                        </li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div class="container contact-container mt-5">
+        <h2>Contact Us</h2>
+        <form method="post">
+            {% csrf_token %}
+            <div class="form-group mb-3">
+                {{ form.name.label_tag }}
+                {{ form.name }}
+            </div>
+            <div class="form-group mb-3">
+                {{ form.email.label_tag }}
+                {{ form.email }}
+            </div>
+            <div class="form-group mb-3">
+                {{ form.message.label_tag }}
+                {{ form.message }}
+            </div>
+            <button type="submit" class="btn btn-primary btn-submit mt-3">Submit</button>
+        </form>
+    </div>
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .contact-container {
+            max-width: 600px;
+            margin: 50px auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        }
+        .contact-container h2 {
+            margin-bottom: 20px;
+        }
+        .btn-submit {
+            background-color: #007bff;
+            color: white;
+            border: none;
+        }
+    </style>
+</body>
+<div class="container">
+    <footer class="py-5">
+      <div class="row">
+        <div class="col-6 col-md-2 mb-3">
+          <h5>Clinic</h5>
+          <ul class="nav flex-column">
+            <li class="nav-item mb-2"><a href="{% url 'index'%}" class="nav-link p-0 text-body-secondary">Home</a></li>
+            <li class="nav-item mb-2"><a href="{% url 'about'%}" class="nav-link p-0 text-body-secondary">About Us</a></li>
+            <li class="nav-item mb-2"><a href="{% url 'contact'%}" class="nav-link p-0 text-body-secondary">Contact Us</a></li>
+            <li class="nav-item mb-2"><a href="{% if user.is_authenticated %}{% url 'booking' %}{% else %}#{% endif %}" class="nav-link p-0 text-body-secondary">Booking</a></li>
+          </ul>
+        </div>
+  
+        <div class="col-6 col-md-2 mb-3">
+          <h5>Clinic Services</h5>
+          <ul class="nav flex-column">
+            <li class="nav-item mb-2"><a href="{% if user.is_authenticated %}{% url 'booking' %}{% else %}#{% endif %}" class="nav-link p-0 text-body-secondary">Doctor care</a></li>
+            <li class="nav-item mb-2"><a href="{% if user.is_authenticated %}{% url 'booking' %}{% else %}#{% endif %}" class="nav-link p-0 text-body-secondary">Nursing care</a></li>
+            <li class="nav-item mb-2"><a href="{% if user.is_authenticated %}{% url 'booking' %}{% else %}#{% endif %}" class="nav-link p-0 text-body-secondary">Medical social services</a></li>
+            <li class="nav-item mb-2"><a href="{% if user.is_authenticated %}{% url 'booking' %}{% else %}#{% endif %}" class="nav-link p-0 text-body-secondary">Homemaker or basic assistance care</a></li>
+          </ul>
+        </div>
+
+        <div class="col-6 col-md-2 mb-3">
+            <h5>Contact Us</h5>
+            <ul class="nav flex-column">
+              <li class="nav-item mb-2"><a href="{% url 'contact'%}" class="nav-link p-0 text-body-secondary">Contact Form</a></li>
+            </ul>
+          </div>
+  
+          <div class="col-md-5 offset-md-1 mb-3">
+            <form method="post" action="{% url 'subscribe' %}">
+                {% csrf_token %}
+                <h5>Subscribe to our newsletter</h5>
+                <p>Monthly digest of what's new and exciting from us.</p>
+                <div class="d-flex flex-column flex-sm-row w-100 gap-2">
+                    <label for="newsletter1" class="visually-hidden">Email address</label>
+                    <input id="newsletter1" type="text" name="email" class="form-control" placeholder="Email address">
+                    <button class="btn btn-primary" type="submit">Subscribe</button>
+                </div>
+            </form>
+            {% if messages %}
+                <ul class="messages">
+                    {% for message in messages %}
+                        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        </div>
+      </div>
+
+      <div class="d-flex flex-column flex-sm-row justify-content-between py-4 my-4 border-top">
+        <p>&copy; Healthy Life Clinic, Inc. All rights reserved.</p>
+      </div>
+  </div>
+</footer>
+
+</html>

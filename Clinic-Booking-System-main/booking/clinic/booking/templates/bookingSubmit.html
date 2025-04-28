@@ -1,0 +1,62 @@
+<title>Online Booking</title>
+{% extends 'layout.html' %}
+{% load static %}
+{% block body %}
+
+{% if user.is_authenticated %}
+<h1 class="text-center fPersian mt-3">Online Booking</h1>
+
+<div class="shadow p-4 mb-5 bg-body bg-body rounded text-black text-center m-5">
+    <form method="post" action="{% url 'bookingSubmit' %}" class="me-2 ms-2" required>
+        {% csrf_token %}
+        
+        <!--input time-->
+        <h3 class="text-center fPersian mt-4">Time:</h3>
+        <div>
+            <select class="form-select fs-3 text-center" name="time">
+                {% for time in times %}
+                <option value="{{time}}">{{time}}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <button type="submit" id="myButton" class="btn btn-primary text-white mt-3 fPersian">
+            <span class="button-text">Submit</span>
+            <span class="spinner-border spinner-border-sm ms-2" role="status" aria-hidden="true"></span>
+            <span class="loading-text ms-2">Loading...</span> 
+        </button>
+        <script>
+            document.getElementById('myButton').addEventListener('click', function(event) {
+                var buttonText = this.querySelector('.button-text');
+                var spinner = this.querySelector('.spinner-border');
+                var loadingText = this.querySelector('.loading-text');
+                
+                buttonText.style.display = 'none';
+                spinner.style.display = 'inline-block';
+                loadingText.style.display = 'inline';
+            });
+            window.addEventListener('pageshow', function(event) {
+                var buttonText = document.querySelector('.button-text');
+                var spinner = document.querySelector('.spinner-border');
+                var loadingText = document.querySelector('.loading-text');
+        
+                buttonText.style.display = 'inline';
+                spinner.style.display = 'none';
+                loadingText.style.display = 'none';
+            });
+        </script>
+    </form>
+</div>
+
+
+
+{% else %}
+
+<div class="shadow p-4 mb-5 bg-body bg-body rounded text-black  m-5">
+    <h1 class="p-2  me-3">First Sign in!</h1>
+    <a href="{% url 'login' %}" class="btn btn-primary text-white">Sign in</a>
+</div>
+
+{% endif %}
+
+{% endblock %}
