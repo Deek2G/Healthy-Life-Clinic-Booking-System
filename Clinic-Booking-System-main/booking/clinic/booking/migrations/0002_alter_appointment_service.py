@@ -13,6 +13,6 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='appointment',
             name='service',
-            field=models.CharField(choices=[('Doctor care', 'Doctor care'), ('Nursing care', 'Nursing care'), ('Medical social services', 'Medical social services'), ('Homemaker or basic assistance care', 'Homemaker or basic assistance care')], default='Doctor care', max_length=50),
+            field=models.CharField(choices=[("Consultation", "Consultation"), ("Follow-up", "Follow-up"), ("Health Check-up", "Health Check-up"), ("Vaccination", "Vaccination"), ("Lab Test", "Lab Test"), ("Pediatric Checkup", "Pediactric Checkup")], default="Consultation", max_length=50),
         ),
     ]

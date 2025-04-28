@@ -19,9 +19,9 @@ class Migration(migrations.Migration):
             name='Appointment',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('service', models.CharField(choices=[('Filler', 'Filler'), ('Botox', 'Botox'), ('Nakh', 'Nakh'), ('Javansazi', 'Javansazi'), ('Laghari', 'Laghari'), ('Lazer', 'Lazer'), ('Bardasht Ghabghab', 'Bardasht Ghabghab'), ('Bardasht Khal', 'Bardasht Khal'), ('Subsision', 'Subsision'), ('Termia', 'Termia'), ('Tarmim', 'Tarmim'), ('Moshavere', 'Moshavere'), ('Other', 'Other')], default='Other', max_length=50)),
+                ('service', models.CharField(choices=[("Consultation", "Consultation"), ("Follow-up", "Follow-up"), ("Health Check-up", "Health Check-up"), ("Vaccination", "Vaccination"), ("Lab Test", "Lab Test"), ("Pediatric Checkup", "Pediactric Checkup")], default="Consultation", max_length=50)),
                 ('day', models.DateField(default=datetime.datetime.now)),
-                ('time', models.CharField(choices=[('3 PM', '3 PM'), ('3:30 PM', '3:30 PM'), ('4 PM', '4 PM'), ('4:30 PM', '4:30 PM'), ('5 PM', '5 PM'), ('5:30 PM', '5:30 PM'), ('6 PM', '6 PM'), ('6:30 PM', '6:30 PM'), ('7 PM', '7 PM'), ('7:30 PM', '7:30 PM')], default='3 PM', max_length=10)),
+                ('time', models.CharField(choices=[("10:00 AM", "10:00 AM"), ("10:30 AM", "10:30 AM"), ("11:00 AM", "11:00 AM"), ("11:30 AM", "11:30 AM"), ("1:00 PM", "1:00 PM"), ("1:30 PM", "1:30 PM"), ("2:00 PM", "2:00 PM"), ("2:30 PM", "2:30 PM"), ("3:00 PM", "3:00 PM"), ("3:30 PM", "3:30 PM"), ("4:00 PM", "4:00 PM"), ("4:30 PM", "4:30 PM"), ("5:00 PM", "5:00 PM"), ("5:30 PM", "5:30 PM")], default="10:00 AM", max_length=14)),
                 ('time_ordered', models.DateTimeField(blank=True, default=datetime.datetime.now)),
                 ('user', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
             ],
