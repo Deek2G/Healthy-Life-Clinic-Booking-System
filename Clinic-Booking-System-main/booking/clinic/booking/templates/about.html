@@ -14,9 +14,9 @@
     --text-light: #EDF2F4;
 }
 
-/* Background Image */
-.hero-section {
-    background-image: linear-gradient(
+/* Background */
+body {
+    background: linear-gradient(
         to bottom right,
         rgba(42, 157, 143, 0.7),
         rgba(38, 70, 83, 0.7)
@@ -24,32 +24,29 @@
     background-size: cover;
     background-position: center;
     background-attachment: fixed;
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: var(--text-light);
-    position: relative;
 }
 
-/* Panel Style */
+/* About Panel */
 .about-panel {
-    background: rgba(255, 255, 255, 0.9);
+    background: rgba(255, 255, 255, 0.95);
     padding: 3rem;
     border-radius: 1rem;
     box-shadow: 0 15px 25px rgba(0, 0, 0, 0.1);
     backdrop-filter: blur(10px);
+    animation: fadeInUp 0.8s ease forwards;
+    margin: 5rem auto 3rem auto;
     max-width: 800px;
     width: 100%;
     opacity: 0;
-    animation: fadeIn 1.5s ease-in-out forwards; /* Fade-in animation */
 }
 
-@keyframes fadeIn {
+@keyframes fadeInUp {
     0% {
+        transform: translateY(40px);
         opacity: 0;
     }
     100% {
+        transform: translateY(0);
         opacity: 1;
     }
 }
@@ -76,7 +73,7 @@
     color: var(--text-dark);
     font-size: 1.1rem;
     line-height: 1.8;
-    text-align: center;  /* Center text */
+    text-align: center;
 }
 
 .about-panel ul {
@@ -88,36 +85,53 @@
     margin-bottom: 0.8rem;
 }
 
-.team-section {
-    background: var(--text-light);
-    padding: 5rem 0;
+/* Doctor Section Panel */
+.doctor-panel {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(6px);
+    padding: 4rem 2rem;
+    margin-top: 2rem;
+    border-top-left-radius: 2rem;
+    border-top-right-radius: 2rem;
+    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* Team Section */
+.team-section h2 {
+    font-weight: bold;
+    color: var(--primary-color);
+    margin-bottom: 2rem;
 }
 
 .team-card {
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
     border: none;
     border-radius: 1rem;
-    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1); /* Added shadow to the card */
-    background-color: #fff; /* Card background color */
-    height: 500px; /* Make the card taller */
+    background-color: #fff;
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    padding: 1.5rem 1rem;
+    text-align: center;
+    height: 100%;
 }
 
 .team-card:hover {
     transform: translateY(-1rem);
-    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15); /* Enhanced shadow on hover */
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
 }
 
 .team-image {
     width: 100%;
-    height: 350px; /* Set height greater than width */
+    aspect-ratio: 1 / 1;
     object-fit: cover;
-    border-radius: 10px; /* Change from circle to a rounded rectangle */
+    border-radius: 1rem;
     margin-bottom: 1rem;
 }
 
 .team-title {
     font-weight: bold;
     color: var(--primary-color);
+    margin-bottom: 0.5rem;
 }
 
 .team-role {
@@ -126,16 +140,13 @@
 
 /* Responsive Design */
 @media (max-width: 768px) {
-    .hero-section {
-        background-position: 65% center;
-    }
-
     .about-panel {
         padding: 2rem;
+        margin: 3rem 1rem;
     }
 
-    .team-section {
-        padding: 4rem 0;
+    .doctor-panel {
+        padding: 3rem 1rem;
     }
 }
 </style>
@@ -143,8 +154,8 @@
 
 {% block body %}
 
-<!-- Hero Section with Background Image -->
-<section class="hero-section">
+<!-- About Section -->
+<section>
     <div class="about-panel">
         <h2>About Us</h2>
         <p>Welcome to HealthyLife Clinic! We are committed to providing the highest quality medical care. Our dedicated team ensures you get the best treatment possible in a comfortable and welcoming environment.</p>
@@ -154,47 +165,43 @@
 
         <h3>Our Values</h3>
         <ul>
-            <li><b>Compassion: </b>Treating each patient with kindness and empathy.</li>
-            <li><b>Integrity: </b>Integrity: Upholding the highest standards of honesty and professionalism.</li>
-            <li><b>Excellence: </b>Striving for continuous improvement and top-quality care.</li>
+            <li><b>Compassion:</b> Treating each patient with kindness and empathy.</li>
+            <li><b>Integrity:</b> Upholding the highest standards of honesty and professionalism.</li>
+            <li><b>Excellence:</b> Striving for continuous improvement and top-quality care.</li>
         </ul>
     </div>
 </section>
 
-<!-- Team Section -->
-<section class="team-section">
-    <div class="container">
-        <h2 class="text-center mb-5 fw-bold">Meet Our Doctors</h2>
-        <div class="row">
-            <div class="col-md-4">
-                <div class="team-card text-center">
-                    <img src="{% static 'images/doctor1.jpg' %}" class="team-image" alt="Dr. Mhel Biol">
-                    <div class="card-body">
+<!-- Doctors Section -->
+<div class="doctor-panel">
+    <section class="team-section">
+        <div class="container-fluid">
+            <h2 class="text-center">Meet Our Doctors</h2>
+            <div class="row justify-content-center g-4">
+                <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+                    <div class="team-card">
+                        <img src="{% static 'images/doctor1.jpg' %}" class="team-image" alt="Dr. Mhel Biol">
                         <h5 class="team-title">Dr. Mhel Biol</h5>
                         <p class="team-role">General Practitioner</p>
                     </div>
                 </div>
-            </div>
-            <div class="col-md-4">
-                <div class="team-card text-center">
-                    <img src="{% static 'images/doctor2.jpg' %}" class="team-image" alt="Dr. Ervin Cantila">
-                    <div class="card-body">
+                <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+                    <div class="team-card">
+                        <img src="{% static 'images/doctor2.jpg' %}" class="team-image" alt="Dr. Ervin Cantila">
                         <h5 class="team-title">Dr. Ervin Cantila</h5>
                         <p class="team-role">Family Medicine Doctor</p>
                     </div>
                 </div>
-            </div>
-            <div class="col-md-4">
-                <div class="team-card text-center">
-                    <img src="{% static 'images/doctor3.jpg' %}" class="team-image" alt="Dr. Josh Nisperos">
-                    <div class="card-body">
+                <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+                    <div class="team-card">
+                        <img src="{% static 'images/doctor3.jpg' %}" class="team-image" alt="Dr. Josh Nisperos">
                         <h5 class="team-title">Dr. Josh Nisperos</h5>
                         <p class="team-role">Pediatrician</p>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-</section>
+    </section>
+</div>
 
 {% endblock %}
