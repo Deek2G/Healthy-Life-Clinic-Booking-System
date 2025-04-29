@@ -139,15 +139,6 @@
     <div class="profile-panel">
         <h1>Welcome, {{ user.first_name }}!</h1>
 
-        <div class="user-info">
-            <h2>User Information</h2>
-            <ul>
-                <li><strong>First Name:</strong> {{ user.first_name }}</li>
-                <li><strong>Last Name:</strong> {{ user.last_name }}</li>
-                <li><strong>Username:</strong> {{ user.username }}</li>
-            </ul>
-        </div>
-
         {% if appointments.count > 0 %}
         <div class="appointment-list">
             <h2>Your Appointments</h2>
