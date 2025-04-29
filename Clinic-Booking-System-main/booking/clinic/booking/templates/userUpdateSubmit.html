@@ -1,41 +1,139 @@
 <title>Edit Appointment</title>
 {% extends 'layout.html' %}
 {% load static %}
+
+{% block head %}
+<style>
+    :root {
+        --primary-color: #2A9D8F;
+        --secondary-color: #264653;
+        --accent-color: #E9C46A;
+        --text-dark: #2B2D42;
+        --text-light: #EDF2F4;
+    }
+
+    body {
+        background: linear-gradient(
+            to bottom right,
+            rgba(42, 157, 143, 0.7),
+            rgba(38, 70, 83, 0.7)
+        ), url('{% static "images/medical-bg.jpg" %}');
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed;
+    }
+
+    .update-submit-panel {
+        background: rgba(255, 255, 255, 0.95);
+        padding: 3rem;
+        border-radius: 1rem;
+        box-shadow: 0 15px 25px rgba(0, 0, 0, 0.1);
+        backdrop-filter: blur(10px);
+        animation: fadeInUp 0.8s ease forwards;
+        margin: 5rem auto;
+        max-width: 800px;
+    }
+
+    .update-submit-panel h1 {
+        text-align: center;
+        color: var(--primary-color);
+        font-weight: 700;
+        margin-bottom: 2rem;
+    }
+
+    .update-submit-panel h3 {
+        color: var(--secondary-color);
+        font-weight: 600;
+        margin-top: 1.5rem;
+    }
+
+    .form-select {
+        font-size: 1.2rem;
+        padding: 0.75rem;
+    }
+
+    .custom-btn {
+        background-color: var(--primary-color) !important;
+        border: none !important;
+        color: white !important;
+        font-size: 1.2rem;
+        padding: 0.75rem 1.5rem;
+        border-radius: 0.5rem;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        margin-top: 2rem;
+    }
+
+    .custom-btn:hover {
+        background-color: #238b7e !important;
+        color: #ffffff !important;
+        transform: translateY(-2px);
+        box-shadow: 0 8px 16px rgba(42, 157, 143, 0.3);
+    }
+
+    .spinner-border,
+    .loading-text {
+        display: none;
+    }
+
+    .spinner-border {
+        width: 1.3rem;
+        height: 1.3rem;
+        border-width: 0.15em;
+    }
+
+    @keyframes fadeInUp {
+        0% {
+            transform: translateY(40px);
+            opacity: 0;
+        }
+        100% {
+            transform: translateY(0);
+            opacity: 1;
+        }
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+        .update-submit-panel {
+            padding: 2rem;
+        }
+    }
+</style>
+{% endblock %}
+
 {% block body %}
-
-
-
-
 {% if user.is_authenticated %}
-<h1 class="text-center fPersian mt-3">Edit Appointment</h1>
+    <div class="update-submit-panel">
+        <h1>Edit Appointment</h1>
+        <form method="post" action="{% url 'userUpdateSubmit' id %}" class="me-2 ms-2" required>
+            {% csrf_token %}
 
-<div class="shadow p-4 mb-5 bg-body bg-body rounded text-black text-center m-5">
-    <form method="post" action="{% url 'userUpdateSubmit' id %}" class="me-2 ms-2" required>
-        {% csrf_token %}
-        
-        <!--input time-->
-        <h3 class="text-center fPersian mt-4">Time:</h3>
-        <div>
-            <select class="form-select fs-3 text-center" name="time">
-                {% for time in times %}
-                <option value="{{time}}">{{time}}</option>
-                {% endfor %}
-            </select>
-        </div>
+            <!--input time-->
+            <div>
+                <h3>Select Time:</h3>
+                <select class="form-select fs-3" name="time">
+                    {% for time in times %}
+                        <option value="{{time}}">{{time}}</option>
+                    {% endfor %}
+                </select>
+            </div>
 
-        <button type="submit" class="btn btn-primary text-white mt-3 fPersian">Submit</button>
-
-    </form>
-</div>
-
+            <!-- Submit Button -->
+            <button type="submit" class="custom-btn">
+                <span class="button-text">Submit</span>
+                <span class="spinner-border spinner-border-sm ms-2" role="status" aria-hidden="true"></span>
+                <span class="loading-text ms-2">Loading...</span>
+            </button>
+        </form>
+    </div>
 {% else %}
-
-<div class="shadow p-4 mb-5 bg-body bg-body rounded text-black  m-5">
-    <h1 class="p-2  me-3">First Sign in!</h1>
-    <a href="{% url 'login' %}" class="btn btn-primary text-white">Sign in</a>
-</div>
-
+    <div class="shadow p-4 mb-5 bg-body bg-body rounded text-black m-5">
+        <h1 class="p-2 me-3">You Are Not Signed in!</h1>
+        <a href="{% url 'login' %}" class="custom-btn">Sign in</a>
+    </div>
 {% endif %}
-
-
 {% endblock %}
