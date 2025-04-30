@@ -14,13 +14,13 @@
         <form method="POST" action="" class="login-form">
             {% csrf_token %}
             
-            <div class="form-group mb-3">
-                <label for="username" class="form-label fs-4">Username</label>
+            <div class="form-group mb-4">
+                <label for="username" class="form-label fs-3">Username</label>
                 <input type="text" class="form-control form-control-lg" name="username" placeholder="Enter your username" required>
             </div>
 
             <div class="form-group mb-4">
-                <label for="password" class="form-label fs-4">Password</label>
+                <label for="password" class="form-label fs-3">Password</label>
                 <input type="password" class="form-control form-control-lg" name="password" placeholder="Enter your password" required>
             </div>
 
@@ -40,13 +40,23 @@
 
 <script>
     document.getElementById('myButton').addEventListener('click', function(event) {
-        var buttonText = this.querySelector('.button-text');
-        var spinner = this.querySelector('.spinner-border');
-        var loadingText = this.querySelector('.loading-text');
+        var username = document.querySelector('input[name="username"]');
+        var password = document.querySelector('input[name="password"]');
         
-        buttonText.style.display = 'none';
-        spinner.style.display = 'inline-block';
-        loadingText.style.display = 'inline';
+        // Check if both fields are not empty
+        if (username.value.trim() === "" || password.value.trim() === "") {
+            event.preventDefault(); // Prevent the form from submitting
+            // Optionally, show a message or highlight the empty fields (for better UX)
+            alert("Please fill in both fields");
+        } else {
+            var buttonText = this.querySelector('.button-text');
+            var spinner = this.querySelector('.spinner-border');
+            var loadingText = this.querySelector('.loading-text');
+            
+            buttonText.style.display = 'none';
+            spinner.style.display = 'inline-block';
+            loadingText.style.display = 'inline';
+        }
     });
 
     window.addEventListener('pageshow', function(event) {
@@ -119,13 +129,13 @@
     .login-form {
         display: flex;
         flex-direction: column;
-        gap: 1.5rem; /* Reduced gap to bring the fields closer */
+        gap: 1.8rem;
     }
 
     .form-label {
         font-weight: 600;
         color: var(--secondary-color);
-        margin-bottom: 0.25rem; /* Reduced margin */
+        margin-bottom: 0.5rem;
     }
 
     .form-control {
