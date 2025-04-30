@@ -3,60 +3,192 @@
 {% load static %}
 {% block body %}
 
-
 {% if user.is_authenticated %}
-<h1 class="p-2 text-center mb-5 text-warning">You Are Already Signed In</h1>
-
+    <h1 class="p-2 text-center mb-5 text-warning">You Are Already Signed In</h1>
 {% else %}
 
-  
-<div class="shadow pb-3 pt-4 mb-5 bg-body bg-body rounded text-black  m-5 fPersian">
-  <h1 class="p-3  me-3">Sign in</h1>
-  <div class="m-5">
-    <form method="POST" action="" class="">
-        {% csrf_token %}
-            <div class="mb-3">
-              <label for="exampleInputEmail1" class="form-label fs-2">Username</label>
-              <input type="text" width="" class="form-control form-control-lg" name="username" aria-describedby="emailHelp" placeholder="Username...">
+<section class="hero-section">
+    <div class="login-panel">
+        <h1 class="text-center mb-4">Sign In</h1>
+
+        <form method="POST" action="" class="login-form">
+            {% csrf_token %}
+            
+            <div class="form-group mb-3">
+                <label for="username" class="form-label fs-4">Username</label>
+                <input type="text" class="form-control form-control-lg" name="username" placeholder="Enter your username" required>
             </div>
-            <div class="mb-3">
-              <label for="exampleInputPassword1" class="form-label fs-2">Password</label>
-              <input type="password" class="form-control form-control-lg" placeholder="Password..." name="password">
+
+            <div class="form-group mb-4">
+                <label for="password" class="form-label fs-4">Password</label>
+                <input type="password" class="form-control form-control-lg" name="password" placeholder="Enter your password" required>
             </div>
-            <button type="submit" id="myButton" class="btn btn-primary">
-              <span class="button-text">Sign in</span>
-              <span class="spinner-border spinner-border-sm ms-2" role="status" aria-hidden="true"></span>
-              <span class="loading-text ms-2">Loading...</span>
+
+            <button type="submit" id="myButton" class="custom-btn w-100">
+                <span class="button-text">Sign In</span>
+                <span class="spinner-border spinner-border-sm ms-2" role="status" aria-hidden="true"></span>
+                <span class="loading-text ms-2">Loading...</span>
             </button>
-            </br>
-            <label class="form-label fs-3 mt-5">Don't Have An Account? Create One Now!</label>
-            </br>
-            <a href="{% url 'register' %}" class="btn btn-primary">Sign Up</a> 
-          </br>
-          <script>
-            document.getElementById('myButton').addEventListener('click', function(event) {
-                var buttonText = this.querySelector('.button-text');
-                var spinner = this.querySelector('.spinner-border');
-                var loadingText = this.querySelector('.loading-text');
-                
-                buttonText.style.display = 'none';
-                spinner.style.display = 'inline-block';
-                loadingText.style.display = 'inline';
-            });
+
+            <div class="mt-3 text-center">
+                <label class="form-label fs-4 mb-3 text-muted">Don't have an account?</label><br>
+                <a href="{% url 'register' %}" class="custom-btn">Sign Up</a>
+            </div>
+        </form>
+    </div>
+</section>
+
+<script>
+    document.getElementById('myButton').addEventListener('click', function(event) {
+        var buttonText = this.querySelector('.button-text');
+        var spinner = this.querySelector('.spinner-border');
+        var loadingText = this.querySelector('.loading-text');
         
-            window.addEventListener('pageshow', function(event) {
-                var buttonText = document.querySelector('.button-text');
-                var spinner = document.querySelector('.spinner-border');
-                var loadingText = document.querySelector('.loading-text');
+        buttonText.style.display = 'none';
+        spinner.style.display = 'inline-block';
+        loadingText.style.display = 'inline';
+    });
+
+    window.addEventListener('pageshow', function(event) {
+        var buttonText = document.querySelector('.button-text');
+        var spinner = document.querySelector('.spinner-border');
+        var loadingText = document.querySelector('.loading-text');
         
-                buttonText.style.display = 'inline';
-                spinner.style.display = 'none';
-                loadingText.style.display = 'none';
-            });
-        </script>
-    </form>
-  </div>
-</div>
+        buttonText.style.display = 'inline';
+        spinner.style.display = 'none';
+        loadingText.style.display = 'none';
+    });
+</script>
+
 {% endif %}
 
+{% endblock %}
+
+{% block head %}
+<style>
+    :root {
+        --primary-color: #2A9D8F;
+        --secondary-color: #264653;
+        --accent-color: #E9C46A;
+        --text-dark: #2B2D42;
+        --text-light: #EDF2F4;
+    }
+
+    body {
+        background: linear-gradient(
+            to bottom right,
+            rgba(42, 157, 143, 0.7),
+            rgba(38, 70, 83, 0.7)
+        ), url('{% static "images/medical-bg.jpg" %}');
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed;
+        font-family: 'Montserrat', sans-serif;
+    }
+
+    .hero-section {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        padding: 0 2rem;
+    }
+
+    .login-panel {
+        background: rgba(255, 255, 255, 0.9);
+        padding: 2.5rem;
+        border-radius: 1rem;
+        max-width: 450px;
+        width: 100%;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        backdrop-filter: blur(10px);
+        animation: fadeInUp 0.8s ease forwards;
+    }
+
+    @keyframes fadeInUp {
+        0% {
+            transform: translateY(40px);
+            opacity: 0;
+        }
+        100% {
+            transform: translateY(0);
+            opacity: 1;
+        }
+    }
+
+    .login-form {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem; /* Reduced gap to bring the fields closer */
+    }
+
+    .form-label {
+        font-weight: 600;
+        color: var(--secondary-color);
+        margin-bottom: 0.25rem; /* Reduced margin */
+    }
+
+    .form-control {
+        font-size: 1.2rem;
+        padding: 0.75rem;
+        border-radius: 0.5rem;
+        border: 1px solid #ddd;
+    }
+
+    .form-control:focus {
+        border-color: var(--primary-color);
+        box-shadow: 0 0 5px rgba(42, 157, 143, 0.5);
+        outline: none;
+    }
+
+    .custom-btn {
+        background-color: var(--primary-color) !important;
+        border: none !important;
+        color: white !important;
+        font-size: 1.2rem;
+        padding: 0.75rem 1.5rem;
+        border-radius: 0.5rem;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+    }
+
+    .custom-btn:hover {
+        background-color: #238b7e !important;
+        color: #ffffff !important;
+        transform: translateY(-2px);
+        box-shadow: 0 8px 16px rgba(42, 157, 143, 0.3);
+    }
+
+    .spinner-border {
+        display: none;
+    }
+
+    .loading-text {
+        display: none;
+    }
+
+    .text-center a {
+        background-color: var(--accent-color);
+        color: var(--text-dark);
+        padding: 0.75rem 1.5rem;
+        border-radius: 0.5rem;
+        font-weight: 600;
+        text-decoration: none;
+        transition: background-color 0.3s ease;
+    }
+
+    .text-center a:hover {
+        background-color: var(--secondary-color);
+        color: white;
+    }
+
+    /* Adjusted text size for the "Don't have an account?" section */
+    .text-muted {
+        font-size: 0.9rem;
+        color: var(--text-dark);
+    }
+</style>
 {% endblock %}
