@@ -1,4 +1,5 @@
 from django import forms
+from .models import Appointment
 
 class ContactForm(forms.Form):
     name = forms.CharField(max_length=100, widget=forms.TextInput(attrs={
@@ -15,12 +16,23 @@ class ContactForm(forms.Form):
     }))
 
 class SubscriptionForm(forms.Form):
-    email = forms.EmailField(label='Your email')
-
-from django import forms
-from .models import Appointment
+    email = forms.EmailField(label='Your email', widget=forms.EmailInput(attrs={
+        'class': 'form-control',
+        'placeholder': 'Enter your email'
+    }))
 
 class AppointmentForm(forms.ModelForm):
     class Meta:
         model = Appointment
-        fields = ['time', 'user', 'service', 'day']
+        fields = ['user', 'time', 'day', 'service']  # custom field order
+        widgets = {
+            'user': forms.Select(attrs={'class': 'form-select'}),
+            'time': forms.Select(attrs={'class': 'form-select'}),
+            'day': forms.DateInput(attrs={
+                'class': 'form-control',
+                'type': 'date',
+                'placeholder': 'Select a date'
+            }),
+            'service': forms.Select(attrs={'class': 'form-select'}),
+        }
+
