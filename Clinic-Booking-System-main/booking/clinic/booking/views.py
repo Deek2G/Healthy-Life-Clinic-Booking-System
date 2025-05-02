@@ -319,3 +319,16 @@ def checkEditTime(times, day, id):
         if Appointment.objects.filter(day=day, time=k).count() < 1 or time == k:
             x.append(k)
     return x
+
+def cancelAppointment(request, appointment_id):
+    # Get the appointment or return 404 if it doesn't exist
+    appointment = get_object_or_404(Appointment, id=appointment_id)
+    
+    # Check if the user owns the appointment
+    if appointment.user != request.user:
+        return HttpResponseForbidden("You cannot cancel this appointment.")
+    
+    # Delete the appointment
+    appointment.delete()
+    messages.success(request, "Appointment cancelled successfully.")
+    return redirect('userPanel')

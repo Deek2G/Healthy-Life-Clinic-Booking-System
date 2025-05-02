@@ -17,6 +17,7 @@ urlpatterns = [
     path('delete_appointment/<int:appointment_id>/', views.delete_appointment, name='delete_appointment'),
     path('edit_appointment/<int:appointment_id>/', views.edit_appointment, name='edit_appointment'),
     path('subscribe', views.subscribe, name='subscribe'),
+    path('cancel-appointment/<int:appointment_id>/', views.cancelAppointment, name='cancelAppointment'),
 ]
 
 # ADD THIS
