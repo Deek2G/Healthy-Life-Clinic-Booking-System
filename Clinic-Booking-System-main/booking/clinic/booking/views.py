@@ -217,12 +217,18 @@ def staffPanel(request):
     deltatime = today + timedelta(days=31)
     strdeltatime = deltatime.strftime('%Y-%m-%d')
     maxDate = strdeltatime
-    # Only show the Appointments 21 days from today
-    items = Appointment.objects.filter(day__range=[minDate, maxDate]).order_by('day', 'time')
+
+    # Query for today's appointments (filtering appointments with today's date)
+    today_items = Appointment.objects.filter(day=minDate).order_by('time')
+
+    # Query for upcoming appointments (filtering appointments with dates after today)
+    upcoming_items = Appointment.objects.filter(day__gt=minDate).order_by('day', 'time')
 
     return render(request, 'staffPanel.html', {
-        'items': items,
+        'today_items': today_items,
+        'upcoming_items': upcoming_items,
     })
+
 
 def delete_appointment(request, appointment_id):
     if not request.user.is_staff:
