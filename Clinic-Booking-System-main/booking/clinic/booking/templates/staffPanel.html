@@ -7,6 +7,7 @@
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
   
   <style>
+    /* Your existing styles */
     :root {
         --primary-color: #2A9D8F;
         --secondary-color: #264653;
@@ -159,13 +160,9 @@
                         <td class="text-center">{{item.day}}</td>
                         <td class="text-center">{{item.doctor}}</td>
                         <td class="text-center">
-                            <form action="{% url 'delete_appointment' item.id %}" method="POST" style="display:inline;">
-                                {% csrf_token %}
-                                <!-- Replace text with Trash Icon for Delete -->
-                                <button type="submit" class="btn btn-danger">
-                                    <i class="fas fa-trash-alt"></i> <!-- Trash icon -->
-                                </button>
-                            </form>
+                            <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteModal" data-id="{{item.id}}">
+                                <i class="fas fa-trash-alt"></i> <!-- Trash icon -->
+                            </button>
                             <!-- Replace text with Pencil Icon for Edit -->
                             <a href="{% url 'edit_appointment' item.id %}" class="btn btn-primary">
                                 <i class="fas fa-edit"></i> <!-- Edit icon -->
@@ -178,6 +175,30 @@
     </div>
 </div>
 
+<!-- Modal for Confirming Deletion -->
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="deleteModalLabel">Confirm Deletion</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          Are you sure you want to delete this appointment?
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+          <form id="deleteForm" method="POST" style="display:inline;">
+              {% csrf_token %}
+              <button type="submit" class="btn btn-danger">Delete</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  
 {% else %}
 
 <div class="staff-panel">
@@ -189,14 +210,25 @@
 
 <!-- Staff Panel Search Script -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
 
 <script>
     $(document).ready(function(){
+        // Search functionality
         $("#myInput").on("keyup", function() {
             var value = $(this).val().toLowerCase();
             $("#myTable tr").filter(function() {
                 $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
             });
+        });
+
+        // Modal trigger
+        $('#deleteModal').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget); 
+            var appointmentId = button.data('id'); 
+
+            var form = $(this).find('form');
+            form.attr('action', '{% url "delete_appointment" "0" %}'.replace('0', appointmentId));
         });
     });
 </script>
