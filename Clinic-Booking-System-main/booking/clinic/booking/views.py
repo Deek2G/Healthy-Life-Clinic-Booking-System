@@ -106,17 +106,38 @@ def userPanel(request):
 def userUpdate(request, id):
     appointment = Appointment.objects.get(pk=id)
     userdatepicked = appointment.day
-    # Copy booking:
     today = datetime.today()
     minDate = today.strftime('%Y-%m-%d')
 
-    # 24h if statement in template:
+    # 24h condition for allowing editing:
     delta24 = (userdatepicked).strftime('%Y-%m-%d') >= (today + timedelta(days=1)).strftime('%Y-%m-%d')
-    # Calling 'validWeekday' Function to Loop days you want in the next 21 days:
+    
+    # Loop to get valid weekdays, and filter out today:
     weekdays = validWeekday(22)
+
+    # Remove today's date from the weekdays list if it exists:
+    weekdays = [day for day in weekdays if day != minDate]
 
     # Only show the days that are not full:
     validateWeekdays = isWeekdayValid(weekdays)
+
+    if request.method == 'POST':
+        service = request.POST.get('service')
+        day = request.POST.get('day')
+
+        # Store day and service in django session:
+        request.session['day'] = day
+        request.session['service'] = service
+
+        return redirect('userUpdateSubmit', id=id)
+
+    return render(request, 'userUpdate.html', {
+        'weekdays': weekdays,
+        'validateWeekdays': validateWeekdays,
+        'delta24': delta24,
+        'id': id,
+    })
+
     
 
     if request.method == 'POST':
