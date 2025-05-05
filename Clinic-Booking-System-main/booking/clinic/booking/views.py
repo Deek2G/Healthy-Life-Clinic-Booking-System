@@ -3,56 +3,11 @@ from django.shortcuts import get_object_or_404, render, redirect
 from datetime import datetime, timedelta
 from .models import *
 from django.contrib import messages
-from .forms import AppointmentForm, ContactForm, SubscriptionForm
+from .forms import AppointmentForm
 from django.core.mail import send_mail
 
 def index(request):
     return render(request, "index.html",{})
-
-def contact(request):
-    if request.method == 'POST':
-        form = ContactForm(request.POST)
-        if form.is_valid():
-            user_email = form.cleaned_data['email']
-            user_name = form.cleaned_data['name']  # Assuming you have a 'name' field
-
-            # Send a thank you email
-            send_mail(
-                'Thank you for contacting us',
-                f'Dear {user_name},\n\nThank you for your message. We will get back to you shortly.\n\nBest regards,\nDr.Mhel Biol',
-                'mhel@example.com',  # Replace with your "from" email address
-                [user_email],
-                fail_silently=False,
-            )
-            # Handle form submission, like sending an email
-            messages.success(request, "Thank you for your message.")
-            return redirect('index')
-    else:
-        form = ContactForm()
-    
-    return render(request, 'contact.html', {'form': form})
-
-def subscribe(request):
-    if request.method == 'POST':
-        form = SubscriptionForm(request.POST)
-        if form.is_valid():
-            user_email = form.cleaned_data['email']
-
-            # Send a confirmation email
-            send_mail(
-                'Subscription Confirmation',
-                'Thank you for subscribing to our newsletter!',
-                'your_email@example.com',  # Replace with your "from" email address
-                [user_email],
-                fail_silently=False,
-            )
-
-            messages.success(request, "Thank you for subscribing to our newsletter.")
-            return redirect('index')  # Redirect to a relevant page
-    else:
-        form = SubscriptionForm()
-
-    return render(request, 'footer.html', {'form': form})
 
 def about(request):
     return render(request, 'about.html')
@@ -61,15 +16,12 @@ def booking(request):
     # Calling 'validWeekday' Function to Loop days you want in the next 21 days:
     weekdays = validWeekday(22)
 
+    # Remove today's date from the weekdays list if it exists:
+    today = datetime.now().strftime('%Y-%m-%d')
+    weekdays = [day for day in weekdays if day != today]
+
     # Only show the days that are not full:
     validateWeekdays = isWeekdayValid(weekdays)
-
-    # # Doctors for each service
-    # doctors = {
-    #     "General Practioner": ["Dr. Mhel Biol"],
-    #     "Family Medicine Doctor": ["Dr. Ervin Cantila"],
-    #     "Pediatrician": ["Dr. Josh Nisperos"]
-    # }
 
     if request.method == 'POST':
         service = request.POST.get('service')
@@ -91,7 +43,6 @@ def booking(request):
         'weekdays': weekdays,
         'validateWeekdays': validateWeekdays,
     })
-
 
 def bookingSubmit(request):
     user = request.user
@@ -144,8 +95,6 @@ def bookingSubmit(request):
         'times': hour,
     })
 
-
-
 def userPanel(request):
     user = request.user
     appointments = Appointment.objects.filter(user=user).order_by('day', 'time')
@@ -157,16 +106,16 @@ def userPanel(request):
 def userUpdate(request, id):
     appointment = Appointment.objects.get(pk=id)
     userdatepicked = appointment.day
-    #Copy  booking:
+    # Copy booking:
     today = datetime.today()
     minDate = today.strftime('%Y-%m-%d')
 
-    #24h if statement in template:
+    # 24h if statement in template:
     delta24 = (userdatepicked).strftime('%Y-%m-%d') >= (today + timedelta(days=1)).strftime('%Y-%m-%d')
-    #Calling 'validWeekday' Function to Loop days you want in the next 21 days:
+    # Calling 'validWeekday' Function to Loop days you want in the next 21 days:
     weekdays = validWeekday(22)
 
-    #Only show the days that are not full:
+    # Only show the days that are not full:
     validateWeekdays = isWeekdayValid(weekdays)
     
 
@@ -174,7 +123,7 @@ def userUpdate(request, id):
         service = request.POST.get('service')
         day = request.POST.get('day')
 
-        #Store day and service in django session:
+        # Store day and service in django session:
         request.session['day'] = day
         request.session['service'] = service
 
@@ -202,7 +151,7 @@ def userUpdateSubmit(request, id):
     day = request.session.get('day')
     service = request.session.get('service')
     
-    #Only show the time of the day that has not been selected before and the time he is editing:
+    # Only show the time of the day that has not been selected before and the time he is editing:
     hour = checkEditTime(times, day, id)
     appointment = Appointment.objects.get(pk=id)
     userSelectedTime = appointment.time
@@ -215,7 +164,7 @@ def userUpdateSubmit(request, id):
                 if date == 'Monday' or date == 'Wednesday' or date == 'Friday':
                     if Appointment.objects.filter(day=day).count() < 11:
                         if Appointment.objects.filter(day=day, time=time).count() < 1 or userSelectedTime == time:
-                            AppointmentForm = Appointment.objects.filter(pk=id).update(
+                            Appointment.objects.filter(pk=id).update(
                                 user = user,
                                 service = service,
                                 day = day,
@@ -285,7 +234,7 @@ def dayToWeekday(x):
     return y
 
 def validWeekday(days):
-    #Loop days you want in the next 21 days:
+    # Loop days you want in the next 21 days:
     today = datetime.now()
     weekdays = []
     for i in range (0, days):
@@ -294,7 +243,7 @@ def validWeekday(days):
         if y == 'Monday' or y == 'Wednesday' or y == 'Friday':
             weekdays.append(x.strftime('%Y-%m-%d'))
     return weekdays
-    
+
 def isWeekdayValid(x):
     validateWeekdays = []
     for j in x:
@@ -303,7 +252,7 @@ def isWeekdayValid(x):
     return validateWeekdays
 
 def checkTime(times, day):
-    #Only show the time of the day that has not been selected before:
+    # Only show the time of the day that has not been selected before:
     x = []
     for k in times:
         if Appointment.objects.filter(day=day, time=k).count() < 1:
@@ -311,7 +260,7 @@ def checkTime(times, day):
     return x
 
 def checkEditTime(times, day, id):
-    #Only show the time of the day that has not been selected before:
+    # Only show the time of the day that has not been selected before:
     x = []
     appointment = Appointment.objects.get(pk=id)
     time = appointment.time
