@@ -44,7 +44,6 @@
     opacity: 0;
 }
 
-/* Animation */
 @keyframes fadeInUp {
     0% {
         transform: translateY(40px);
@@ -56,7 +55,6 @@
     }
 }
 
-/* Headings */
 .profile-panel h1 {
     font-size: 3rem;
     color: var(--primary-color);
@@ -108,13 +106,65 @@
     color: white;
 }
 
-.appointment-card a:last-child {
+.appointment-card a.cancel-btn {
     background-color: var(--danger-color);
     color: white;
 }
 
-.appointment-card a:last-child:hover {
+.appointment-card a.cancel-btn:hover {
     background-color: #d35400;
+}
+
+/* Modal styles */
+.modal-overlay {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.5);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.modal-overlay.show {
+    display: flex;
+}
+
+.modal-box {
+    background: white;
+    padding: 2rem;
+    border-radius: 1rem;
+    max-width: 400px;
+    width: 90%;
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+}
+
+.modal-buttons {
+    margin-top: 1.5rem;
+    display: flex;
+    justify-content: space-around;
+    gap: 1rem;
+}
+
+.modal-buttons a.confirm,
+.modal-buttons button.cancel {
+    padding: 0.5rem 1.2rem;
+    border: none;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.modal-buttons a.confirm {
+    background: #e76f51;
+    color: white;
+    text-decoration: none;
+}
+
+.modal-buttons button.cancel {
+    background: #ccc;
+    color: #333;
 }
 
 /* Sign-in message */
@@ -126,7 +176,6 @@
     box-shadow: 0 15px 30px rgba(0,0,0,0.1);
 }
 
-/* Responsive */
 @media (max-width: 768px) {
     .profile-panel {
         padding: 2rem;
@@ -153,7 +202,7 @@
                 <p><strong>Doctor:</strong> {{ appointment.doctor }}</p>
                 <div style="display: flex; justify-content: space-between; margin-top: 1rem;">
                     <a href="{% url 'userUpdate' appointment.id %}">Edit Appointment</a>
-                    <a href="{% url 'cancelAppointment' appointment.id %}" class="cancel-btn" onclick="return confirm('Are you sure you want to cancel this appointment?');">Cancel Appointment</a>
+                    <a href="#" class="cancel-btn" data-url="{% url 'cancelAppointment' appointment.id %}" onclick="openModal(this); return false;">Cancel Appointment</a>
                 </div>
             </div>
             {% endfor %}
@@ -162,7 +211,6 @@
         <h2>No Appointments Yet!</h2>
         {% endif %}
     </div>
-
     {% else %}
     <div class="sign-in-message">
         <h1>Please Sign In</h1>
@@ -170,4 +218,36 @@
     </div>
     {% endif %}
 </section>
+
+<!-- Cancel Confirmation Modal -->
+<div class="modal-overlay" id="cancelModal">
+  <div class="modal-box" id="modalBox">
+    <h3>Are you sure you want to cancel this appointment?</h3>
+    <div class="modal-buttons">
+      <a href="#" class="confirm" id="confirmCancel">Yes, Cancel</a>
+      <button class="cancel" onclick="closeModal()">No, Go Back</button>
+    </div>
+  </div>
+</div>
+
+<script>
+function openModal(element) {
+    const url = element.getAttribute("data-url");
+    document.getElementById("confirmCancel").setAttribute("href", url);
+    document.getElementById("cancelModal").classList.add("show");
+}
+
+function closeModal() {
+    document.getElementById("cancelModal").classList.remove("show");
+}
+
+// Close modal when clicking outside
+window.addEventListener('click', function(e) {
+    const modal = document.getElementById("cancelModal");
+    const box = document.getElementById("modalBox");
+    if (e.target === modal) {
+        closeModal();
+    }
+});
+</script>
 {% endblock %}
