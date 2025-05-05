@@ -95,6 +95,64 @@
             opacity: 1;
         }
     }
+
+    /* Modal */
+    .modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        display: none;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .modal-box {
+        background-color: white;
+        padding: 2rem;
+        border-radius: 0.5rem;
+        max-width: 500px;
+        width: 100%;
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        animation: fadeZoom 0.3s ease-out;
+    }
+
+    .modal-header h4 {
+        font-size: 1.8rem;
+        margin-bottom: 1rem;
+    }
+
+    .modal-footer button {
+        padding: 0.75rem 1.5rem;
+        font-size: 1.1rem;
+        border: none;
+        background-color: var(--primary-color);
+        color: white;
+        cursor: pointer;
+    }
+
+    .modal-footer button:hover {
+        background-color: #238b7e;
+    }
+
+    .modal-footer .cancel-btn {
+        background-color: #e76f51;
+    }
+
+    /* Animation for Modal */
+    @keyframes fadeZoom {
+        0% {
+            transform: scale(0.8);
+            opacity: 0;
+        }
+        100% {
+            transform: scale(1);
+            opacity: 1;
+        }
+    }
+
 </style>
 {% endblock %}
 
@@ -103,21 +161,21 @@
 <div class="booking-panel">
     <h1>Online Booking</h1>
 
-    <form method="post" action="{% url 'bookingSubmit' %}" required>
+    <form id="bookingForm" method="post" action="{% url 'bookingSubmit' %}" required>
         {% csrf_token %}
-
+        
         <!-- Time Selection -->
         <div>
             <h3>Select Time:</h3>
             <select class="form-select" name="time">
                 {% for time in times %}
-                <option value="{{time}}">{{time}}</option>
+                <option value="{{ time }}">{{ time }}</option>
                 {% endfor %}
             </select>
         </div>
 
         <!-- Submit Button -->
-        <button type="submit" id="myButton" class="custom-btn">
+        <button type="button" id="submitBtn" class="custom-btn">
             <span class="button-text">Submit</span>
             <span class="spinner-border spinner-border-sm ms-2" role="status" aria-hidden="true"></span>
             <span class="loading-text ms-2">Loading...</span>
@@ -125,25 +183,59 @@
     </form>
 </div>
 
-<script>
-    document.getElementById('myButton').addEventListener('click', function () {
-        var buttonText = this.querySelector('.button-text');
-        var spinner = this.querySelector('.spinner-border');
-        var loadingText = this.querySelector('.loading-text');
+<!-- Confirmation Modal -->
+<div class="modal-overlay" id="confirmModal">
+    <div class="modal-box">
+        <div class="modal-header">
+            <h4>Confirm Your Appointment</h4>
+            <p>Are you sure you want to book this appointment?</p>
+        </div>
+        <div class="modal-footer">
+            <button type="button" id="confirmBtn">Confirm</button>
+            <button type="button" class="cancel-btn" id="cancelBtn">Cancel</button>
+        </div>
+    </div>
+</div>
 
+<script>
+    const submitBtn = document.getElementById('submitBtn');
+    const confirmModal = document.getElementById('confirmModal');
+    const confirmBtn = document.getElementById('confirmBtn');
+    const cancelBtn = document.getElementById('cancelBtn');
+    const bookingForm = document.getElementById('bookingForm');
+
+    // Show Modal on Submit Button Click
+    submitBtn.addEventListener('click', function() {
+        confirmModal.style.display = 'flex';
+    });
+
+    // Confirm Button Click (Submit the form)
+    confirmBtn.addEventListener('click', function() {
+        var buttonText = submitBtn.querySelector('.button-text');
+        var spinner = submitBtn.querySelector('.spinner-border');
+        var loadingText = submitBtn.querySelector('.loading-text');
+        
+        // Hide the text and show the loading spinner
         buttonText.style.display = 'none';
         spinner.style.display = 'inline-block';
         loadingText.style.display = 'inline';
+
+        // Submit the form after a slight delay to show the loading spinner
+        setTimeout(function() {
+            bookingForm.submit();
+        }, 500);
     });
 
-    window.addEventListener('pageshow', function () {
-        var buttonText = document.querySelector('.button-text');
-        var spinner = document.querySelector('.spinner-border');
-        var loadingText = document.querySelector('.loading-text');
+    // Cancel Button Click (Close the Modal)
+    cancelBtn.addEventListener('click', function() {
+        confirmModal.style.display = 'none';
+    });
 
-        buttonText.style.display = 'inline';
-        spinner.style.display = 'none';
-        loadingText.style.display = 'none';
+    // Close modal if the user clicks outside the modal
+    window.addEventListener('click', function(e) {
+        if (e.target === confirmModal) {
+            confirmModal.style.display = 'none';
+        }
     });
 </script>
 
